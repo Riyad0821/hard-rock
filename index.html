@@ -55,8 +55,15 @@
             <!-- Single Lyrics -->
             
             </div>
-            <div id="lyric-area">
+            <div id="result-area">
 
+            </div>
+            <div class="single-lyrics text-center">
+                <button class="btn go-back">&lsaquo;</button>
+                <h2 id="name" class="text-success mb-4"></h2>
+                <pre id="lyric" class="lyric text-white">
+                    
+                </pre>
             </div>
         </main>
     </div>
@@ -69,52 +76,101 @@
             fetch(`https://api.lyrics.ovh/suggest/${getSongName.value}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById("lyric-area").innerHTML = '';
+                //console.log(data);
+
+                document.getElementById("result-area").innerHTML = '';
                 const songs = data.data.map(getSongName => getSongName);
                 for (let i = 0; i < 10; i++) {
+                    const count = i;
                     const element = songs[i];
                     const song = element;
                     const songTitle = song.title;
                     const albumTitle = song.album['title'];
                     const artistName = song.artist.name;
                     
-                    songDetails(songTitle, albumTitle, artistName);
-                    const lyricBtn = document.querySelector(".lyric-btn");
-                    lyricBtn.addEventListener("click", function(){
-                        getLyrics(artistName, songTitle);
-                    })
+                    songDetails(songTitle, albumTitle, artistName, count);
+                    // const lyricBtn = document.querySelector(".lyric-btn");
+                    // lyricBtn.addEventListener("click", function(){
+                    //     getLyrics(artistName, songTitle);
+                    // })
                                    
                 }
-                function songDetails(title, albumTitle, artistName){
-                    document.getElementById("lyric-area").innerHTML += `
-            <div class="search-result col-md-8 mx-auto py-4">
-                <!-- single result -->
-                <div class="single-result row align-items-center my-3 p-3">
-                    <div class="col-md-9">
-                        <h3 class="lyrics-name">${title}</h3>
-                        <p class="author lead">Album by <span>${albumTitle}</span></p>
-                        <p class="author lead">Artist: <span>${artistName}</span></p>
-                    </div>
-                    <div class="col-md-3 text-md-right text-center">
-                        <button id="" class="btn btn-success lyric-btn">Get Lyrics</button>
+                function songDetails(title, albumTitle, artistName, count){
+                        document.getElementById("result-area").innerHTML += `
+                <div class="search-result col-md-8 mx-auto py-4">
+                    <!-- single result -->
+                    <div class="single-result row align-items-center my-3 p-3">
+                        <div class="col-md-9">
+                            <h3 class="lyrics-name">${title}</h3>
+                            <p class="author lead">Album : <span>${albumTitle}</span></p>
+                            <p class="author lead">Artist : <span>${artistName}</span></p>
+                        </div>
+                        <div class="col-md-3 text-md-right text-center">
+                            <button id="button${count}" class="btn btn-success lyric-btn">Get Lyrics</button>
                     </div>
                 </div>`
 
                 }
-                function getLyrics(artistName, songTitle)
+
+                document.getElementById("button0").addEventListener("click", function(){
+                    displayLyrics(0);
+                })
+
+                document.getElementById("button1").addEventListener("click", function(){
+                    displayLyrics(1);
+                })
+                document.getElementById("button2").addEventListener("click", function(){
+                    displayLyrics(2);
+                })
+                document.getElementById("button3").addEventListener("click", function(){
+                    displayLyrics(3);
+                })
+
+                document.getElementById("button4").addEventListener("click", function(){
+                    displayLyrics(4);
+                })
+                document.getElementById("button5").addEventListener("click", function(){
+                    displayLyrics(5);
+                })
+                document.getElementById("button6").addEventListener("click", function(){
+                    displayLyrics(6);
+                })
+
+                document.getElementById("button7").addEventListener("click", function(){
+                    displayLyrics(7);
+                })
+                document.getElementById("button8").addEventListener("click", function(){
+                    displayLyrics(8);
+                })
+                document.getElementById("button9").addEventListener("click", function(){
+                    displayLyrics(9);
+                })
+
+
+
+
+                function displayLyrics(count){
+                    document.getElementById("lyric").style.display = "block";
+                    const title = data.data[count].title;
+                    const artist = data.data[count].artist.name;
+                    getLyrics(artist, title);
+                    function  getLyrics(artistName, songTitle)
                 {
                     fetch(`https://api.lyrics.ovh/v1/${artistName}/${songTitle}`)
                     .then (response => response.json())
                     .then (data => {
-                        document.getElementById("lyric-area").innerHTML +=`
-                        <div class="single-lyrics text-center">
-                <button class="btn go-back">&lsaquo;</button>
-                <h2 class="text-success mb-4">${songTitle} - ${artistName}</h2>
-                <pre class="lyric text-white">
-                ${songTitle.lyrics}
-                </pre>
-            </div>`
+                        if(data.error){
+                            document.getElementById("name").innerText = artist +" - "+ title;
+                            document.getElementById("lyric").innerText = "Lyrics not found";
+
+                        }
+                        else{
+                            const songLyrics = data.lyrics;
+                            document.getElementById("lyric").innerText = songLyrics;
+                            document.getElementById("name").innerText = artist +" - "+ title;
+                        }
                     })
+                }
                 }
             })
         })
