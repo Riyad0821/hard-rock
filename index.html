@@ -91,22 +91,27 @@
                     const songTitle = song.title;
                     const albumTitle = song.album['title'];
                     const artistName = song.artist.name;
+                    const image = song.artist.picture;
+                    console.log(image);
                     
-                    songDetails(songTitle, albumTitle, artistName, count);
+                    songDetails(songTitle, albumTitle, artistName, count, image);
                                    
                 }
                 
                 //Song Details Function
 
-                function songDetails(title, albumTitle, artistName, count){
+                function songDetails(title, albumTitle, artistName, count, image){
                         document.getElementById("result-area").innerHTML += `
                 <div class="search-result col-md-8 mx-auto py-4">
                     <!-- single result -->
                     <div class="single-result row align-items-center my-3 p-3">
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <h3 class="lyrics-name">${title}</h3>
                             <p class="author lead">Album : <span>${albumTitle}</span></p>
                             <p class="author lead">Artist : <span>${artistName}</span></p>
+                        </div>
+                        <div class="col-md-5">
+                            <img src="${image}" alt="">
                         </div>
                         <div class="col-md-3 text-md-right text-center">
                             <button id="button${count}" class="btn btn-success lyric-btn">Get Lyrics</button>
