@@ -69,6 +69,8 @@
     </div>
 
     <script>
+
+        // Activate Search Button
         const getSongName = document.querySelector('.form-control');
         const searchBtn = document.querySelector('.search-btn');
 
@@ -76,9 +78,11 @@
             fetch(`https://api.lyrics.ovh/suggest/${getSongName.value}`)
             .then(response => response.json())
             .then(data => {
-                //console.log(data);
-
+                //Previous result and lyric clear
+                document.getElementById("name").innerText = '';
+                document.getElementById("lyric").innerText = '';
                 document.getElementById("result-area").innerHTML = '';
+
                 const songs = data.data.map(getSongName => getSongName);
                 for (let i = 0; i < 10; i++) {
                     const count = i;
@@ -89,12 +93,11 @@
                     const artistName = song.artist.name;
                     
                     songDetails(songTitle, albumTitle, artistName, count);
-                    // const lyricBtn = document.querySelector(".lyric-btn");
-                    // lyricBtn.addEventListener("click", function(){
-                    //     getLyrics(artistName, songTitle);
-                    // })
                                    
                 }
+                
+                //Song Details Function
+
                 function songDetails(title, albumTitle, artistName, count){
                         document.getElementById("result-area").innerHTML += `
                 <div class="search-result col-md-8 mx-auto py-4">
@@ -111,7 +114,7 @@
                 </div>`
 
                 }
-
+                // Get Lyrics Buttons Activate
                 document.getElementById("button0").addEventListener("click", function(){
                     displayLyrics(0);
                 })
@@ -147,30 +150,32 @@
                 })
 
 
-
+                //Display Lyrics Function
 
                 function displayLyrics(count){
                     document.getElementById("lyric").style.display = "block";
                     const title = data.data[count].title;
                     const artist = data.data[count].artist.name;
                     getLyrics(artist, title);
-                    function  getLyrics(artistName, songTitle)
-                {
-                    fetch(`https://api.lyrics.ovh/v1/${artistName}/${songTitle}`)
-                    .then (response => response.json())
-                    .then (data => {
-                        if(data.error){
-                            document.getElementById("name").innerText = artist +" - "+ title;
-                            document.getElementById("lyric").innerText = "Lyrics not found";
 
-                        }
-                        else{
-                            const songLyrics = data.lyrics;
-                            document.getElementById("lyric").innerText = songLyrics;
-                            document.getElementById("name").innerText = artist +" - "+ title;
-                        }
-                    })
-                }
+
+                    function  getLyrics(artistName, songTitle)
+                    {
+                        fetch(`https://api.lyrics.ovh/v1/${artistName}/${songTitle}`)
+                        .then (response => response.json())
+                        .then (data => {
+                            if(data.error){
+                                document.getElementById("name").innerText = artist +" - "+ title;
+                                document.getElementById("lyric").innerText = "Lyrics not found";
+
+                            }
+                            else{
+                                const songLyrics = data.lyrics;
+                                document.getElementById("lyric").innerText = songLyrics;
+                                document.getElementById("name").innerText = artist +" - "+ title;
+                            }
+                        })
+                    }
                 }
             })
         })
